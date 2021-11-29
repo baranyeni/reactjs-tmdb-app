@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
+import App from "./app-main";
 const TMDBLogo = "./images/tmdb.svg";
 
 class SearchBox extends Component {
   handleChange(event) {
+    console.log("Evet abi benim");
     event.target.select();
   }
   render() {
@@ -38,4 +40,4 @@ class SearchBox extends Component {
     );
   }
 }
-module.exports = SearchBox;
+export default SearchBox;

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import App from "./app-main";
 let numeral = require('numeral');
 let backdropIMG;
 
@@ -8,7 +9,6 @@ class Card extends Component {
   render() {
     let data = this.props.data
       // if movie ID found, then...
-
 
 
       let posterIMG = 'https://image.tmdb.org/t/p/w500' + data.poster,
@@ -21,7 +21,6 @@ class Card extends Component {
           noData = '-',
           genresList = nestedDataToString(genres);
           backdropIMG = 'https://image.tmdb.org/t/p/original' + data.backdrop;
-
 
 
       // conditional statements for no data
@@ -85,4 +84,5 @@ function nestedDataToString(nestedData) {
   resultString = nestedArray.join(', '); // array to string
   return resultString;
 };
-module.exports = Card;
+
+export default Card;

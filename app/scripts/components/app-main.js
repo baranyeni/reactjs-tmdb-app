@@ -1,29 +1,32 @@
 import React, { Component } from 'react';
+
 import SearchBox from './search';
 import Card from './card';
+import Navbar from './navbar';
 
 class App extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      movieID: 157336 // set initital load movie - Interstellar
+      movieID: "157336__", // Interstellar
+      isUserLoggedIn: false
     }
   }
+
   render() {
     return (
       <div>
+        <Navbar isUserLoggedIn={this.state.isUserLoggedIn} />
         <SearchBox fetchMovieID={this.fetchMovieID.bind(this)}/>
         <Card data={this.state}/>
       </div>
     )
-  } // END render
+  }
 
-  // the api request function
   fetchApi(url) {
 
     fetch(url).then((res) => res.json()).then((data) => {
-      // update state with API data
       this.setState({
         movieID: data.id,
         original_title: data.original_title,
@@ -45,18 +48,17 @@ class App extends Component {
 
     // .catch((err) => console.log('Movie not found!'))
 
-  } // end function
+  }
 
   fetchMovieID(movieID) {
     let url = `https://api.themoviedb.org/3/movie/${movieID}?&api_key=cfe422613b250f702980a3bbf9e90716`
     this.fetchApi(url)
-  } // end function
+  }
 
   componentDidMount() {
     let url = `https://api.themoviedb.org/3/movie/${this.state.movieID}?&api_key=cfe422613b250f702980a3bbf9e90716`
     this.fetchApi(url)
 
-    //========================= BLOODHOUND ==============================//
     let suggests = new Bloodhound({
       datumTokenizer: function(datum) {
         return Bloodhound.tokenizers.whitespace(datum.value);
@@ -76,23 +78,17 @@ class App extends Component {
       } // end remote
     }); // end new Bloodhound
 
-    suggests.initialize(); // initialise bloodhound suggestion engine
+    suggests.initialize();
 
-    //========================= END BLOODHOUND ==============================//
-
-    //========================= TYPEAHEAD ==============================//
-    // Instantiate the Typeahead UI
     $('.typeahead').typeahead({
       hint: true,
       highlight: true,
       minLength: 2
     }, {source: suggests.ttAdapter()}).on('typeahead:selected', function(obj, datum) {
       this.fetchMovieID(datum.id)
-    }.bind(this)); // END Instantiate the Typeahead UI
-    //========================= END TYPEAHEAD ==============================//
+    }.bind(this));
 
-  } // end component did mount function
-
-  // } // END CLASS - APP
+  }
 }
-module.exports = App;
+
+export default App;
